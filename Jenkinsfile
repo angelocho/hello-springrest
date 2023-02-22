@@ -7,12 +7,8 @@ pipeline {
     stages {
         stage('Testing') {
             steps{
-	      step {
                      sh 'docker-compose config'
-              }
-              step{
                      sh './gradlew test'
-              }
               post {
                  always {
                       junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
