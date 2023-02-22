@@ -35,3 +35,5 @@ build/
 elasticfolder/.elasticbeanstalk/*
 !elasticfolder/.elasticbeanstalk/*.cfg.yml
 !elasticfolder/.elasticbeanstalk/*.global.yml
+!elasticfolder/.elasticbeanstalk/config.yml
+
