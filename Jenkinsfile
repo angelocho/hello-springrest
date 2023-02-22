@@ -6,16 +6,18 @@ pipeline {
     }
     stages {
         stage('Testing') {
-            step {
-                   sh 'docker-compose config'
-            }
-            step{
-                   sh './gradlew test'
-            }
-            post {
-               always {
+            steps{
+	      step {
+                     sh 'docker-compose config'
+              }
+              step{
+                     sh './gradlew test'
+              }
+              post {
+                 always {
                       junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
-               }        
+                 }        
+              }
             }
         }
         stage('BuildDocker') {
