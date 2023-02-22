@@ -6,7 +6,7 @@ pipeline {
     }
     stages {
         stage('Testing') {
-            steps{
+            steps {
                      sh 'docker-compose config'
                      sh './gradlew test'
             } post {
