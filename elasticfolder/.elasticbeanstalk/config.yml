@@ -1,6 +1,6 @@
 branch-defaults:
   default:
-    environment: null
+    environment: springrest-angelocho
     group_suffix: null
 global:
   application_name: elasticfolder
