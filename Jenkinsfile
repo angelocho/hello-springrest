@@ -38,7 +38,7 @@ pipeline {
                 sh 'mkdir -p build/reports/trivy/'
                 dir('build/reports/trivy'){ 
                     sh 'trivy image --format json -o docker-report.json  ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}'
-                    sh 'trivy filesystem -format json -o vulnfs.json .'
+                    sh 'trivy filesystem -format json -o vulnfs.json ../../../.'
                 }
               }
                  post {
