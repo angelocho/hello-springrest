@@ -33,13 +33,14 @@ pipeline {
                 sh "docker tag ghcr.io/angelocho/hello-springrest/springrest:latest ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}"
             }
         }
-        stage('ScanningDocker'){
+        stage('ScanningDockerandvuln'){
               steps {
                 sh 'trivy image --format json -o docker-report.json  ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}'
+                sh 'trivy filesystem -format json -o vulnfs.json .'
               }
                  post {
                         always {
-                                recordIssues(tools: [trivy(pattern: 'docker-report.json')])
+                                recordIssues(tools: [trivy(pattern: '*.json')])
                         }       
                 }
         }
