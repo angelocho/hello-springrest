@@ -15,7 +15,7 @@ pipeline {
                         always {
                                 junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
                                 jacoco classPattern: 'build/classes/java/main', execPattern: 'build/jacoco/*.exec', sourcePattern: 'src/main/java/com/example/restservice'
-                                recordIssues(tools: [pmdParser(pattern: 'build/reports/pmd/')])
+                                recordIssues(tools: [pmdParser(pattern: 'build/reports/pmd/*.xml')])
                         }       
                 }
  
