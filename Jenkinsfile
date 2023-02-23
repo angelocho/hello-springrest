@@ -43,7 +43,7 @@ pipeline {
             steps {
                 withAWS(credentials:'clave-aws') {
                     dir('./elasticfolder') {
-			sh 'eb create springrest-angelocho'
+			sh 'eb deploy springrest-angelocho'
                     }   
                 }
             }
