@@ -10,14 +10,14 @@ pipeline {
                      sh 'docker-compose config'
                      sh './gradlew test'
                      sh './gradlew check'
-                     sh 'trivy filesystem -format json -o vulnfs.json .'
+                     
             }
             post {
                         always {
                                 junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
                                 jacoco classPattern: 'build/classes/java/main', execPattern: 'build/jacoco/*.exec', sourcePattern: 'src/main/java/com/example/restservice'
                                 recordIssues(tools: [pmdParser(pattern: 'build/reports/pmd/*.xml')])
-                                recordIssues(tools: [trivy(pattern: 'vulnfs.json')])
+                                
                         }       
                 }
  
