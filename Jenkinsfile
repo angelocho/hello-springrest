@@ -5,7 +5,7 @@ pipeline {
         ansiColor('xterm')
     }
     stages {
-        stage('Testing') {
+        stage('Testingandvuln') {
             steps {
                      sh 'docker-compose config'
                      sh './gradlew test'
@@ -16,10 +16,12 @@ pipeline {
                                 junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
                                 jacoco classPattern: 'build/classes/java/main', execPattern: 'build/jacoco/*.exec', sourcePattern: 'src/main/java/com/example/restservice'
                                 recordIssues(tools: [pmdParser(pattern: 'build/reports/pmd/*.xml')])
+                                recordIssues(tools: [trivy(pattern: '.')])
                         }       
                 }
  
         }
+    
         stage('BuildDocker') {
             steps {
                 sh 'docker-compose build'
@@ -29,6 +31,11 @@ pipeline {
                 }
                 sh "docker tag ghcr.io/angelocho/hello-springrest/springrest:latest ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}"
             }
+        }
+        stage('ScanningDocker'){
+              steps {
+                sh 'trivy image --format json -o docker-report.json  ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}'
+              }   
         }
         stage('Dockerlogin'){
            steps {
