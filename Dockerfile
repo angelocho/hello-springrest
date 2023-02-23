@@ -1,6 +1,6 @@
 FROM maven:3.8.7-amazoncorretto-11 as builder
 WORKDIR /tmp/app
-COPY app/ .
+COPY . .
 RUN ./gradlew assemble
 
 FROM amazoncorretto:11-alpine3.17 as runtime
