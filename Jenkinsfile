@@ -14,7 +14,7 @@ pipeline {
             }
             post {
                         always {
-                                junit(testResults: 'build/test-results/test/*xml', allowEmptyResults: true)
+                                junit(testResults: 'build/test-results/test/*.xml', allowEmptyResults: true)
                                 jacoco classPattern: 'build/classes/java/main', execPattern: 'build/jacoco/*.exec', sourcePattern: 'src/main/java/com/example/restservice'
                                 recordIssues(tools: [pmdParser(pattern: 'build/reports/pmd/*.xml')])
                                 
@@ -35,12 +35,15 @@ pipeline {
         }
         stage('ScanningDockerandvuln'){
               steps {
-                sh 'trivy image --format json -o docker-report.json  ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}'
-                sh 'trivy filesystem -format json -o vulnfs.json .'
+                sh 'mkdir -p build/reports/trivy/'
+                dir('build/reports/trivy'){ 
+                    sh 'trivy image --format json -o docker-report.json  ghcr.io/angelocho/hello-springrest/springrest:1.0.${BUILD_NUMBER}'
+                    sh 'trivy filesystem -format json -o vulnfs.json .'
+                }
               }
                  post {
                         always {
-                                recordIssues(tools: [trivy(pattern: '*.json')])
+                                recordIssues(tools: [trivy(pattern: 'build/reports/trivy/*.json')])
                         }       
                 }
         }
@@ -57,7 +60,7 @@ pipeline {
             steps {
                 withAWS(credentials:'clave-aws') {
                     dir('./elasticfolder') {
-			sh 'eb deploy springrest-angelocho'
+			            sh 'eb deploy springrest-angelocho'
                     }   
                 }
             }
