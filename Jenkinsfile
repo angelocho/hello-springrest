@@ -8,11 +8,14 @@ pipeline {
         stage('Testing') {
             steps {
                      sh 'docker-compose config'
-                     sh './gradlew test'
+                     dir('app'){
+                        sh './gradlew test'
+                     }
             }
             post {
                         always {
-                                junit skipOldReports: true, skipPublishingChecks: true, testResults: 'build/test-results/test/*xml'
+                                junit skipOldReports: true, skipPublishingChecks: true, testResults: 'app/build/test-results/test/*xml'
+                                jacoco classPattern: 'app/build/classes/java/main', execPattern: 'app/build/jacoco/*.exec', sourcePattern: 'app/src/main/java/com/example/restservice'
                         }       
                 }
  
@@ -40,7 +43,7 @@ pipeline {
             steps {
                 withAWS(credentials:'clave-aws') {
                     dir('./elasticfolder') {
-			sh 'eb deploy springrest-angelocho'
+			sh 'eb create springrest-angelocho'
                     }   
                 }
             }
